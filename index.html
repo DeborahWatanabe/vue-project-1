@@ -9,19 +9,33 @@
 </head>
 <body>
 <div id="app">
+    <p>Interpolation</p>
     <h1 v-once>{{ title }}</h1>
-    <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+    <p>{{ sayHello() }} - <a :href="link">Google</a></p>
     <p v-html="finishedLink"></p>
     <hr>
 
     <p>Listening to events</p>
-    <button v-on:click="increase(2, $event)">Click me</button>
+    <button @click="increase(2, $event)">Click me</button>
     <p>{{ counter }}</p>
-    <p v-on:mousemove="updateCoordinates">
+    <p @mousemove="updateCoordinates">
         Coordinates: ({{ x }}, {{ y }})
-        - <span v-on:mousemove.stop>DEAD SPOT</span>
+        - <span @mousemove.stop>DEAD SPOT</span>
     </p>
-    <input type="text" v-on:keyup.enter="alertMe">
+    <input type="text" @keyup.enter="alertMe">
+    <hr>
+
+    <p>Two-Way-Binding</p>
+    <input type="text" v-model="name">
+    <p>{{ name }}</p>
+    <hr>
+
+    <p>Computed and Watch Properties</p>
+    <button @click="counterA++">Increase A</button>
+    <button @click="counterA--">Decrease A</button>
+    <button @click="counterB++">Increase B</button>
+    <p>Counter: A={{ counterA }} B={{ counterB }}</p>
+    <p>Result: A={{ resultMethodA() }} {{ resultComputedA }}</p>
 </div>
 
 <script>
@@ -33,7 +47,24 @@
             finishedLink: '<a href="http://google.com">Google</a>',
             counter: 0,
             x: 0,
-            y: 0
+            y: 0,
+            name: 'Deborah',
+            counterA: 0,
+            counterB: 0
+        },
+        computed: {
+            resultComputedA: function() {
+                console.log('Computed')
+                return this.counterA > 5 ? 'Greater than 5' : 'Smaller than 5'
+            }
+        },
+        watch: {
+            counterA: function(value) {
+                var vm = this
+                setTimeout(function() {
+                    vm.counterA = 0
+                }, 2000)
+            }
         },
         methods: {
             sayHello: function() {
@@ -49,6 +80,10 @@
             },
             alertMe: function() {
                 alert('Alert!')
+            },
+            resultMethodA: function() {
+                console.log('Method')
+                return this.counterA > 5 ? 'Greater than 5' : 'Smaller than 5'
             }
         }
     })
