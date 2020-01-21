@@ -11,8 +11,17 @@
 <div id="app">
     <h1 v-once>{{ title }}</h1>
     <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
-    <hr>
     <p v-html="finishedLink"></p>
+    <hr>
+
+    <p>Listening to events</p>
+    <button v-on:click="increase(2, $event)">Click me</button>
+    <p>{{ counter }}</p>
+    <p v-on:mousemove="updateCoordinates">
+        Coordinates: ({{ x }}, {{ y }})
+        - <span v-on:mousemove.stop>DEAD SPOT</span>
+    </p>
+    <input type="text" v-on:keyup.enter="alertMe">
 </div>
 
 <script>
@@ -21,12 +30,25 @@
         data: {
   	        title: 'Hello World!',
             link: 'http://google.com',
-            finishedLink: '<a href="http://google.com">Google</a>'
+            finishedLink: '<a href="http://google.com">Google</a>',
+            counter: 0,
+            x: 0,
+            y: 0
         },
         methods: {
             sayHello: function() {
                 this.title = 'Hello!'
                 return this.title
+            },
+            increase: function(step, event) {
+                return this.counter +=step 
+            },
+            updateCoordinates: function(event) {
+                this.x = event.clientX
+                this.y = event.clientY
+            },
+            alertMe: function() {
+                alert('Alert!')
             }
         }
     })
