@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="">
     <script src="vue.js"></script>
 </head>
+
 <body>
 <div id="app">
     <p>Interpolation</p>
@@ -36,6 +37,14 @@
     <button @click="counterB++">Increase B</button>
     <p>Counter: A={{ counterA }} B={{ counterB }}</p>
     <p>Result: A={{ resultMethodA() }} {{ resultComputedA }}</p>
+    <hr>
+
+    <p>Dynamic CSS</p>
+    <div class="demo" @click="attachRed = !attachRed" :class="divClasses"></div>
+    <div class="demo" :style="myStyle"></div>
+    <div class="demo" :class="[color, {red: attachRed}]"></div>
+    <br><input type="text" v-model="color">
+    <input type="text" v-model="width">
 </div>
 
 <script>
@@ -50,12 +59,27 @@
             y: 0,
             name: 'Deborah',
             counterA: 0,
-            counterB: 0
+            counterB: 0,
+            attachRed: false,
+            color: 'green',
+            width: 100
         },
         computed: {
             resultComputedA: function() {
                 console.log('Computed')
                 return this.counterA > 5 ? 'Greater than 5' : 'Smaller than 5'
+            },
+            divClasses: function() {
+                return {
+                    red: this.attachRed, 
+                    blue: !this.attachRed
+                }
+            },
+            myStyle: function() {
+                return {
+                    backgroundColor: this.color,
+                    width: this.width + 'px'
+                }
             }
         },
         watch: {
@@ -88,5 +112,24 @@
         }
     })
 </script>
+
+<style>
+    .demo {
+        width: 100px;
+        height: 100px;
+        background-color: gray;
+        display: inline-block;
+        margin: 10px;
+    }
+    .red {
+        background-color: red;
+    }
+    .green {
+        background-color: green;
+    }
+    .blue {
+        background-color: blue;
+    }
+</style>
 </body>
 </html>
