@@ -40,8 +40,10 @@
 
   <!-- 6) Create a simple progress bar with setInterval and style bindings. Start it by hitting the below button. -->
   <div>
-    <button>Start Progress</button>
-    <div></div>
+    <button @click="startProgress">Start Progress</button>
+    <div :class="progressBar">
+      <div :style="progressIndicator"></div>
+    </div>
   </div>
 </div>
 
@@ -54,7 +56,19 @@ new Vue({
     background: 'superBackground',
     myClass: 'superFont',
     useShrink: false,
-    myStyle: 'color: blue'
+    myStyle: 'color: blue',
+    progressBar: 'bar',
+    progressPercentage: 0,
+    progressColor: 'red'
+  },
+  computed: {
+    progressIndicator: function() {
+      return {
+        width: this.progressPercentage + '%',
+        height: '30px',
+        backgroundColor: this.progressColor
+      }
+    }
   },
   methods: {
     startEffect: function() {
@@ -65,7 +79,22 @@ new Vue({
         } else {
           vm.myEffect = 'highlight'
         }
-      }, 1000);
+      }, 1000)
+    },
+    startProgress: function() {
+      var vm = this
+      var step = 5
+      setInterval(function() {
+        if (vm.progressPercentage < 100 - step) {
+          vm.progressPercentage += step
+        } else if (vm.progressPercentage == 100 - step) {
+          vm.progressPercentage += step
+          vm.progressColor = 'green'
+        } else {
+          vm.progressColor = 'red'
+          vm.progressPercentage = 0
+        }
+      }, 100)
     }
   }
 });
@@ -96,6 +125,12 @@ new Vue({
 
 .superBackground {
   background-color: greenyellow;
+}
+
+.bar {
+  border: 1px solid black;
+  width: 300px;
+  height: 30px;
 }
 </style>
 </body>
