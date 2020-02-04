@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VueJS - Section 3</title>
+    <link rel="stylesheet" href="">
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>v-if, v-else, v-else-if, v-show</h1>
+        <p>Texto visível</p>
+        <p v-if="show == 'A'">A - Pode ver, pode esconder <span>vendo?</span></p>
+        <p v-else-if="show == 'B'">B - Pode esconder, pode ver</p>
+        <template v-else>
+            <p>Outro...</p>
+            <p>Mais coisas</p>
+        </template v-else>
+        <input type="text" v-model="show">
+        <p v-show="show == 'A'">Esse elemento pode ser escondido, mas não é eliminado</p>
+        <hr>
+
+        <h1>v-for</h1>
+        <ul>
+            <li v-for="(ingredient, i) in ingredients">{{ ingredient }} (índice = {{ i }})</li>
+        </ul>
+        <button @click="ingredients.push('Banana')">Inserir banana</button>
+        <template v-for="(ingredient, i) in ingredients">
+            <h4>{{ ingredient }}</h4>
+            <p>{{ i }}</p>
+        </template>
+        
+        <ul>
+            <li v-for="person in persons">
+                <div v-for="(value, key) in person">{{ key }}: {{ value }}</div>
+            </li>
+        </ul>
+
+        <span v-for="i in 10">{{ i }} </span>
+    </div>
+</body>
+
+<script>
+    new Vue ({
+        el: '#app',
+        data: {
+            show: 'A',
+            ingredients: ['Maçã', 'Laranja', 'Morango'],
+            persons: [
+                {name: 'João', age: 25},
+                {name: 'Maria', age: 24}
+            ]
+        },
+        methods: {
+
+        }
+    })
+</script>
+
+<style>
+
+</style>
+</html>
