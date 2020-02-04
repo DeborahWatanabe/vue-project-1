@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>VueJS - Section 3</title>
+  <link rel="stylesheet" href="">
+  <script src="../vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="playersContainer">
+      <div>
+        <h1>{{ player.name }}</h1>
+        <div class="lifeBar">
+          <div :style="lifeBarStatus(player.life, player.maxLife)">
+            <p class="lifeNumber">{{ player.life }}</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h1>{{ monster.name }}</h1>
+        <div class="lifeBar">
+          <div :style="lifeBarStatus(monster.life, monster.maxLife)">
+            <p class="lifeNumber">{{ monster.life }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="actionsContainer">
+        <button class="attackBtn btn" @click="playerAttack">Atacar</button>
+        <button class="specialBtn btn" @click="playerSpecial">Ataque especial</button>
+        <button class="healBtn btn" @click="playerHeal">Curar</button>
+        <button class="giveUpBtn btn">Desistir</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+new Vue ({
+  el: '#app',
+  data: {
+    player: {
+      name: 'You',
+      maxLife: 100,
+      life: 5,
+      attack: 10,
+      specialAttack: 20,
+      heal: 15
+    },
+    monster: {
+      name: 'Monster',
+      maxLife: 50,
+      life: 50,
+      attack: 5,
+      specialAttack: 10
+    }
+  },
+  computed: {
+    
+  },
+  watch: {
+
+  },
+  methods: {
+    startGame: function() {
+      this.player.life = this.player.maxLife
+      this.monster.life = this.monster.maxLife
+    },
+    playerAttack: function() {
+      attackPower = this.player.attack + Math.floor(Math.random() * 5)
+      if (attackPower < this.monster.life) {
+        this.monster.life -= attackPower
+      } else {
+        this.monster.life = 0
+      }
+    },
+    playerSpecial: function() {
+      attackPower = this.player.specialAttack + Math.floor(Math.random() * 5)
+      if (attackPower < this.monster.life) {
+        this.monster.life -= attackPower
+      } else {
+        this.monster.life = 0
+      }
+    },
+    playerHeal: function() {
+      if (this.player.maxLife - this.player.life > this.player.heal) {
+        this.player.life += this.player.heal
+      } else {
+        this.player.life += this.player.maxLife - this.player.life
+      }
+    },
+    monsterAttack: function() {
+      this.player.life -= this.monster.attack + Math.floor(Math.random() * 5)
+    },
+    monsterSpecial: function() {
+      this.player.life -= this.monster.specialAttack + Math.floor(Math.random() * 5)
+    },
+    lifeBarStatus: function(life, maxLife) {
+      width = (life / maxLife)*100
+      return {
+        height: '100%',
+        width: width + '%',
+        backgroundColor: 'green'
+      }
+    }
+  }
+})
+</script>
+
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.playersContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 50px 0 50px;
+  align-items: center;
+}
+
+.lifeBar {
+  border: 2px solid black;
+  width: 400px;
+  height: 30px;
+}
+
+.lifeNumber {
+  color: white;
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+}
+
+.actionsContainer {
+  border: 2px solid black;
+  height: 100px;
+  width: 800px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.btn {
+  width: 150px;
+  border: none;
+  margin: 20px;
+}
+
+.attackBtn {
+  background-color: tomato;
+}
+
+.specialBtn {
+  background-color: red;
+}
+
+.healBtn {
+  background-color: green;
+}
+
+.giveUpBtn {
+  background-color: grey;
+}
+</style>
+</html>
