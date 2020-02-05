@@ -30,10 +30,15 @@
     </div>
     <div class="container">
       <div class="actionsContainer">
-        <button class="attackBtn btn" @click="playerAttack">Atacar</button>
-        <button class="specialBtn btn" @click="playerSpecial">Ataque especial</button>
-        <button class="healBtn btn" @click="playerHeal">Curar</button>
-        <button class="giveUpBtn btn">Desistir</button>
+        <template v-if="gameStarted">
+          <button class="attackBtn btn" @click="playerAttack">Atacar</button>
+          <button class="specialBtn btn" @click="playerSpecial">Ataque especial</button>
+          <button class="healBtn btn" @click="playerHeal">Curar</button>
+          <button class="giveUpBtn btn">Desistir</button>
+        </template>
+        <template v-else>
+          <button class="newGameBtn btn" @click="startGame">Novo jogo</button>
+        </template>
       </div>
     </div>
   </div>
@@ -43,6 +48,7 @@
 new Vue ({
   el: '#app',
   data: {
+    gameStarted: false,
     player: {
       name: 'You',
       maxLife: 100,
@@ -57,16 +63,21 @@ new Vue ({
       life: 50,
       attack: 5,
       specialAttack: 10
-    }
+    },
+    monsterIsDead: false
   },
   computed: {
     
   },
   watch: {
-
+    monsterIsDead: function() {
+      alert('Parabéns! Você derrotou o monstro.')
+      this.gameStarted = false
+    }
   },
   methods: {
     startGame: function() {
+      this.gameStarted = true
       this.player.life = this.player.maxLife
       this.monster.life = this.monster.maxLife
     },
@@ -76,6 +87,7 @@ new Vue ({
         this.monster.life -= attackPower
       } else {
         this.monster.life = 0
+        this.monsterIsDead = true
       }
     },
     playerSpecial: function() {
@@ -84,6 +96,7 @@ new Vue ({
         this.monster.life -= attackPower
       } else {
         this.monster.life = 0
+        this.monsterIsDead = true
       }
     },
     playerHeal: function() {
@@ -151,6 +164,10 @@ new Vue ({
   width: 150px;
   border: none;
   margin: 20px;
+}
+
+.newGameBtn {
+  background-color: green;
 }
 
 .attackBtn {
